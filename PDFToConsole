@@ -1,1 +1,23 @@
+import java.lang.*;
+import java.io.File;
+import java.io.IOException;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+
+public class PDFToConsole {
+    public static void main(String args[]) throws IOException{
+
+        //Loading a pdf file using File class
+        File file = new File( "Path of file Here from local storage" );
+        //Creating object of PDF document
+        PDDocument document = PDDocument.load(file);
+        //Instantiate PDFTextStripper class so that content can be stripped
+        PDFTextStripper pdfStripper = new PDFTextStripper();
+        //Getting text from PDF document
+        String text = pdfStripper.getText(document);
+        System.out.println(text);
+        //Closing the document as it is no more needed
+        document.close();
+    }
+}
 
