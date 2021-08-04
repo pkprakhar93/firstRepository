@@ -1,0 +1,84 @@
+package com.pdf.extractor;
+
+import com.spire.pdf.PdfDocument;
+import com.spire.pdf.PdfPageBase;
+import com.spire.pdf.general.find.PdfTextFind;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class PdfExtractorServiceApplication {
+
+	public static void main(String[] args) {
+		System.out.println(" Printing All Phone Number");
+		phoneNumberExtractor();
+		System.out.println('\n');
+
+		System.out.println(" Printing All Email");
+		emailExtractor();
+		System.out.println('\n');
+
+		System.out.println(" Printing Complete PDF");
+		completePdfExtractor();
+	}
+
+	private static void phoneNumberExtractor() {
+		try {
+			PdfDocument pdf = new PdfDocument();
+			pdf.loadFromFile("./Praveen.pdf");
+			PdfTextFind[] results;
+			for (Object page : (Iterable) pdf.getPages()) {
+				PdfPageBase pageBase = (PdfPageBase) page;
+				String pattern = "\\d{10}|(?:\\d{3}-){2}\\d{4}|\\(\\d{3}\\)\\d{3}-?\\d{4}";
+				results = pageBase.findText(pattern).getFinds();
+				for (PdfTextFind find : results) {
+					System.out.println(find.getMatchText());
+				}
+			}
+
+		}
+		catch (Exception ex) {
+			System.out.println("Exception is " + ex.getMessage());
+		}
+
+	}
+
+	private static void emailExtractor() {
+		try {
+			PdfDocument pdf = new PdfDocument();
+			pdf.loadFromFile("./Praveen.pdf");
+			PdfTextFind[] results;
+			for (Object page : (Iterable) pdf.getPages()) {
+				PdfPageBase pageBase = (PdfPageBase) page;
+				String pattern = "\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b";
+				results = pageBase.findText(pattern).getFinds();
+				for (PdfTextFind find : results) {
+					System.out.println(find.getMatchText());
+				}
+			}
+
+		}
+		catch (Exception ex) {
+			System.out.println("Exception is " + ex.getMessage());
+		}
+
+	}
+
+	private static void completePdfExtractor() {
+		try {
+			String input = "./Praveen.pdf";
+			PdfDocument pdf = new PdfDocument();
+			pdf.loadFromFile(input);
+			PdfPageBase page;
+			for (int i = 0; i < pdf.getPages().getCount(); i++) {
+				page = pdf.getPages().get(i);
+				String text = page.extractText(true);
+				System.out.println(text);
+			}
+		}
+		catch (Exception ex) {
+			System.out.println("Exception is " + ex.getMessage());
+		}
+
+	}
+
+}
